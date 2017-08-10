@@ -65,9 +65,6 @@ public class ConfigurationUtil {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(configFile);
 
-			// Initialize AmazonCloudWatch
-            initializeAWSCredentials(awsConfiguration, doc);
-
 			// Initialize Namespaces
 			Element namespacesElement = (Element) doc.getElementsByTagName("SupportedNamespaces").item(0);
 			NodeList namespaces = namespacesElement.getElementsByTagName("SupportedNamespace");
@@ -157,22 +154,6 @@ public class ConfigurationUtil {
 			configFile.close();
 		}
 	}
-
-    private static void initializeAWSCredentials(Configuration awsConfiguration, Document doc) {
-        Element credentialsFromFile = (Element) doc.getElementsByTagName("AWSCredentials").item(0);
-        if(credentialsFromFile.getElementsByTagName("EncryptionKey").item(0) != null) {
-            String encryptionKey = doc.getElementsByTagName("EncryptionKey").item(0).getTextContent();
-            String encryptedAccessKey = credentialsFromFile.getElementsByTagName("EncryptedAccessKey").item(0).getTextContent();
-            String encryptedSecretKey = credentialsFromFile.getElementsByTagName("EncryptedSecretKey").item(0).getTextContent();
-            Decryptor decryptor = new Decryptor(encryptionKey);
-            awsConfiguration.awsCredentials = new BasicAWSCredentials(decryptor.decrypt(encryptedAccessKey), decryptor.decrypt(encryptedSecretKey));
-        } else {
-            String accessKey = credentialsFromFile.getElementsByTagName("AccessKey").item(0).getTextContent();
-            String secretKey = credentialsFromFile.getElementsByTagName("SecretKey").item(0).getTextContent();
-            awsConfiguration.awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-        }
-
-    }
 
     private static MetricType convertToMetricType(String namespace, String metricName, String metricTypeName) {
 		MetricType metricType = null; 

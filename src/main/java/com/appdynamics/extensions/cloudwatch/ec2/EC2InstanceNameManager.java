@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
@@ -39,7 +39,7 @@ public class EC2InstanceNameManager {
 	
 	private ExecutorService ec2WorkerPool;
 	
-	private AWSCredentials awsCredentials;
+	private AWSSessionCredentials awsSessionCredentials;
 	
 	private boolean initialised;
 	
@@ -62,9 +62,9 @@ public class EC2InstanceNameManager {
 		regionEndPoints = Collections.unmodifiableMap(tmpRegionEndpoints);
 	}
 	
-	public EC2InstanceNameManager(AWSCredentials awsCredentials, 
+	public EC2InstanceNameManager(AWSSessionCredentials awsSessionCredentials,
 			String tagFilterName, String tagKey) {
-		this.awsCredentials = awsCredentials;
+		this.awsSessionCredentials = awsSessionCredentials;
 		this.tagFilterName = tagFilterName;
 		this.tagKey = tagKey;
 		this.ec2WorkerPool = Executors.newFixedThreadPool(5);
@@ -144,7 +144,7 @@ public class EC2InstanceNameManager {
 	}
 	
 	private void retrieveInstancesPerRegion(String region, String... instanceIds) {
-		AmazonEC2Client ec2Client = new AmazonEC2Client(awsCredentials);
+		AmazonEC2Client ec2Client = new AmazonEC2Client(awsSessionCredentials);
 		ec2Client.setEndpoint(regionEndPoints.get(region));
 		
 		Filter filter = new Filter();

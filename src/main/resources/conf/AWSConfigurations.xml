@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <Configurations>
 
-    <AWSCredentials>
-        <AccessKey></AccessKey>
-        <SecretKey></SecretKey>
-    </AWSCredentials>
-    
     <ProxyParams>
         <Host></Host>
         <Port></Port>

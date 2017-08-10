@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <Configurations>
 
-    <AWSCredentials>
-    	<AccessKey></AccessKey>
-        <SecretKey></SecretKey>
-    </AWSCredentials>
-
     <!-- MetricManagers for these namespaces have been implemented -->
     <SupportedNamespaces>
         <SupportedNamespace>AWS/EC2</SupportedNamespace>
